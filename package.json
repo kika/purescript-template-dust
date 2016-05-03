@@ -1,0 +1,21 @@
+{
+  "name": "purescript-template-dust",
+  "version": "0.0.1",
+  "description": "Purescript bindings to Linkedin Dust templates",
+  "homepage": "https://github.com/kika/purescript-template-dust#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kika/purescript-template-dust.git"
+  },
+  "keywords": [
+    "purescript"
+  ],
+  "author": "Kirill Pertsev <kika@kikap.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kika/purescript-template-dust/issues"
+  },
+  "devDependencies": {
+    "dustjs-linkedin": "^2.7.2"
+  }
+}

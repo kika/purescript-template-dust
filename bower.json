@@ -1,6 +1,12 @@
 {
   "name": "purescript-template-dust",
-  "version": "1.0.0",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": "Kirill Pertsev <kika@kikap.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kika/purescript-template-dust.git"
+  },
   "moduleType": [
     "node"
   ],
@@ -12,7 +18,13 @@
   ],
   "dependencies": {
     "purescript-console": "^0.1.0",
-    "dustjs-linkedin": "^2.7.2",
-    "purescript-functions": "^0.1.0"
+    "purescript-functions": "^0.1.0",
+    "purescript-nullable": "^0.2.1",
+    "purescript-either": "^0.2.3",
+    "purescript-exceptions": "^0.3.4",
+    "purescript-unsafe-coerce": "^0.1.0"
+  },
+  "devDependencies": {
+    "dustjs-linkedin": "^2.7.2"
   }
 }
