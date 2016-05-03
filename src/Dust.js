@@ -3,9 +3,10 @@
 // module Dust
 
 // either use global `dust` instance or require module
-var _PS_dust = (typeof dust == 'undefined')? require( "dustjs-linkedin" ) : dust;
+//var _PS_dust = (typeof dust == 'undefined')? require( "dustjs-linkedin" ) : dust;
+var dust = require( "dustjs-linkedin" );
 
-exports.compileImpl = _PS_dust.compile;
+exports.compileImpl = dust.compile;
 
 exports.callbackImpl = function(left, right, cb) {
     return function (err, result) {
@@ -17,4 +18,8 @@ exports.callbackImpl = function(left, right, cb) {
     }
 }
 
-exports.renderImpl = _PS_dust.render
+exports.renderImpl = dust.render
+exports.loadImpl   = function (src) { 
+    console.log(src);
+    return dust.loadSource(src); 
+}
