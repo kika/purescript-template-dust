@@ -22,8 +22,7 @@
     "purescript-nullable": "^0.2.1",
     "purescript-either": "^0.2.3",
     "purescript-exceptions": "^0.3.4",
-    "purescript-unsafe-coerce": "^0.1.0",
-    "purescript-eff-functions": "^0.1.2"
+    "purescript-unsafe-coerce": "^0.1.0"
   },
   "devDependencies": {
     "dustjs-linkedin": "^2.7.2"

@@ -19,4 +19,11 @@ exports.callbackImpl = function(left, right, cb) {
 }
 
 exports.renderImpl = dust.render;
-exports.loadImpl   = dust.loadSource;
+
+exports.loadImpl   = function( source ) {
+    return function() {
+        dust.loadSource( source );
+        return {};
+    }
+}
+
