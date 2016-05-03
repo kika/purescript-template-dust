@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - 4
+install:
+  - npm install bower pulp -g
+  - npm install
+  - bower install
+script:
+  - pulp test
