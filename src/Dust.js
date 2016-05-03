@@ -18,8 +18,5 @@ exports.callbackImpl = function(left, right, cb) {
     }
 }
 
-exports.renderImpl = dust.render
-exports.loadImpl   = function (src) { 
-    console.log(src);
-    return dust.loadSource(src); 
-}
+exports.renderImpl = dust.render;
+exports.loadImpl   = dust.loadSource;

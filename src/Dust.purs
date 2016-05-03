@@ -13,6 +13,7 @@ import Control.Monad.Eff.Exception (Error)
 import Data.Nullable (Nullable)
 import Data.Either (Either(Right, Left)) 
 import Data.Function (Fn1(), Fn2(), Fn3(), runFn1, runFn2, runFn3)
+import Data.Function.Eff (EffFn1(), runEffFn1)
 import Unsafe.Coerce (unsafeCoerce)
 
 type CompiledTemplate = String
@@ -23,7 +24,7 @@ type RenderCallback eff a = Either Error a -> Eff ( dust :: DUST | eff ) Unit
 foreign import data DUST :: !
 foreign import compileImpl :: Fn2 String String CompiledTemplate
 foreign import loadImpl :: 
-  forall eff. Fn1 CompiledTemplate (Eff( dust :: DUST | eff ) Unit)
+  forall eff. EffFn1 ( dust :: DUST | eff ) CompiledTemplate Unit
 foreign import callbackImpl :: 
   forall eff a. Fn3 (Error -> Either Error a) (a -> Either Error a)
                     (RenderCallback eff a) (RenderCallbackJS a)
@@ -45,7 +46,7 @@ compile :: String -> String -> CompiledTemplate
 compile src name = runFn2 compileImpl src name
 
 load :: forall eff. CompiledTemplate -> Eff ( dust :: DUST | eff) Unit
-load code = runFn1 loadImpl code
+load code = runEffFn1 loadImpl code
 
 render :: forall eff ctx. String -> {|ctx} -> RenderCallback eff String -> 
                           Eff( dust :: DUST | eff) Unit
