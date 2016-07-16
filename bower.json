@@ -25,6 +25,7 @@
     "purescript-unsafe-coerce": "^1.0.0"
   },
   "devDependencies": {
-    "dustjs-linkedin": "^2.7.2"
+    "dustjs-linkedin": "^2.7.2",
+    "purescript-psci-support": "^1.0.0"
   }
 }
