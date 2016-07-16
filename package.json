@@ -1,6 +1,6 @@
 {
   "name": "purescript-template-dust",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "Purescript bindings to Linkedin Dust templates",
   "homepage": "https://github.com/kika/purescript-template-dust#readme",
   "repository": {
