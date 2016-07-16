@@ -4,6 +4,7 @@ module Dust
   , compile
   , load
   , render
+  , renderSync
   , RenderCallback (..)
 ) where
 
@@ -12,7 +13,8 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Exception (Error)
 import Data.Nullable (Nullable)
 import Data.Either (Either(Right, Left)) 
-import Data.Function.Uncurried (Fn1(), Fn2(), Fn3(), runFn1, runFn2, runFn3)
+import Data.Function.Uncurried (Fn1, Fn2, Fn3, Fn4, 
+                                runFn1, runFn2, runFn3, runFn4)
 import Unsafe.Coerce (unsafeCoerce)
 
 type CompiledTemplate = String
@@ -29,6 +31,11 @@ foreign import callbackImpl ::
                     (RenderCallback eff a) (RenderCallbackJS a)
 foreign import renderImpl :: 
   forall ctx. Fn3 String {|ctx} (RenderCallbackJS String) Unit
+foreign import renderSyncImpl :: 
+  forall ctx eff. Fn4 String {|ctx} 
+                  (Error -> Either Error String)
+                  (String -> Either Error String)
+                  (Eff ( dust::DUST|eff ) (Either Error String))
 
 -- typecast a function into Eff monad
 -- smells some C++
@@ -41,13 +48,28 @@ runCallback cb = runFn3 callbackImpl Left Right cb
 
 
 -- Public API
+
+-- | Compiles template contained in string `src` into internal representation
+-- | and gives it the name `name`. Returns compiled template (js source)
 compile :: String -> String -> CompiledTemplate
 compile src name = runFn2 compileImpl src name
 
+-- | Loads the template into the engine 
 load :: forall eff. CompiledTemplate -> Eff ( dust :: DUST | eff) Unit
 load code = runFn1 loadImpl code
 
+-- | Renders the template asynchronously
+-- | Runs the template `name` giving it the record with context `context` 
+-- | and calls the callback with `Either` `Error` or `String` with rendered
+-- | contents.
 render :: forall eff ctx. String -> {|ctx} -> RenderCallback eff String -> 
-                          Eff( dust :: DUST | eff) Unit
+                          Eff (dust::DUST|eff) Unit
 render name context cb = 
   mkEff $ \_ -> runFn3 renderImpl name context (runCallback cb)
+
+-- | The `render` function can actually run synchronously if everything
+-- | is preloaded in advance. To avoid using callbacks this is a 
+-- | convenience wrapper.
+renderSync::forall eff ctx. String -> {|ctx} -> 
+                            (Eff (dust::DUST|eff) (Either Error String))
+renderSync name ctx = runFn4 renderSyncImpl name ctx Left Right
