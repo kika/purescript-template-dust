@@ -9,9 +9,9 @@ import Dust (compile, load, render, DUST())
 main :: forall e. Eff (dust :: DUST, console :: CONSOLE | e) Unit
 main = do
   let cjs = compile "<div>{test}</div>" "test"
-  log ("Compiled template: " ++ cjs)
+  log ("Compiled template: " <> cjs)
   load cjs
   log "Template loaded"
   render "test" {test : "Test string"} $ \res -> case res of
-    (Left err)     -> log ("Render error: " ++ show err)
-    (Right result) -> log ("Render result: " ++ result)
+    (Left err)     -> log ("Render error: " <> show err)
+    (Right result) -> log ("Render result: " <> result)

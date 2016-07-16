@@ -12,7 +12,7 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Exception (Error)
 import Data.Nullable (Nullable)
 import Data.Either (Either(Right, Left)) 
-import Data.Function (Fn1(), Fn2(), Fn3(), runFn1, runFn2, runFn3)
+import Data.Function.Uncurried (Fn1(), Fn2(), Fn3(), runFn1, runFn2, runFn3)
 import Unsafe.Coerce (unsafeCoerce)
 
 type CompiledTemplate = String
