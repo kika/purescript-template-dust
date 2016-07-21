@@ -1,6 +1,7 @@
 module Dust
 (
     DUST()
+  , runDust
   , compile
   , load
   , render
@@ -35,12 +36,16 @@ foreign import renderSyncImpl ::
   forall ctx eff. Fn4 String {|ctx} 
                   (Error -> Either Error String)
                   (String -> Either Error String)
-                  (Eff ( dust::DUST|eff ) (Either Error String))
+                  (Eff eff (Either Error String))
 
 -- typecast a function into Eff monad
 -- smells some C++
 mkEff :: forall eff a. (Unit -> a) -> Eff eff a
 mkEff = unsafeCoerce
+
+-- | removes the DUST effect
+runDust::forall eff a. (Eff (dust::DUST|eff) a) -> Eff eff a
+runDust = unsafeCoerce
 
 -- shove PS callback into JS one
 runCallback :: forall eff a. (RenderCallback eff a) -> RenderCallbackJS a
@@ -55,7 +60,7 @@ compile :: String -> String -> CompiledTemplate
 compile src name = runFn2 compileImpl src name
 
 -- | Loads the template into the engine 
-load :: forall eff. CompiledTemplate -> Eff ( dust :: DUST | eff) Unit
+load :: forall eff. CompiledTemplate -> Eff (dust :: DUST | eff) Unit
 load code = runFn1 loadImpl code
 
 -- | Renders the template asynchronously
@@ -63,13 +68,15 @@ load code = runFn1 loadImpl code
 -- | and calls the callback with `Either` `Error` or `String` with rendered
 -- | contents.
 render :: forall eff ctx. String -> {|ctx} -> RenderCallback eff String -> 
-                          Eff (dust::DUST|eff) Unit
+                          Eff (dust::DUST | eff) Unit
 render name context cb = 
   mkEff $ \_ -> runFn3 renderImpl name context (runCallback cb)
 
 -- | The `render` function can actually run synchronously if everything
 -- | is preloaded in advance. To avoid using callbacks this is a 
 -- | convenience wrapper.
+-- | It handles errors and thus removes the DUST effect
 renderSync::forall eff ctx. String -> {|ctx} -> 
-                            (Eff (dust::DUST|eff) (Either Error String))
+                            (Eff eff (Either Error String))
 renderSync name ctx = runFn4 renderSyncImpl name ctx Left Right
+
