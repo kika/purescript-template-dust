@@ -7,6 +7,7 @@ module Dust
   , render
   , renderSync
   , RenderCallback (..)
+  , setDebug
 ) where
 
 import Prelude
@@ -37,6 +38,7 @@ foreign import renderSyncImpl ::
                   (Error -> Either Error String)
                   (String -> Either Error String)
                   (Eff eff (Either Error String))
+foreign import setDebugImpl::forall e.Fn1 Boolean (Eff ( dust::DUST|e ) Unit)
 
 -- typecast a function into Eff monad
 -- smells some C++
@@ -79,4 +81,9 @@ render name context cb =
 renderSync::forall eff ctx. String -> {|ctx} -> 
                             (Eff eff (Either Error String))
 renderSync name ctx = runFn4 renderSyncImpl name ctx Left Right
+
+-- | Sets the boolean flas which controls whitespace compression
+-- | `true` means no compression 
+setDebug::forall eff. Boolean -> Eff (dust::DUST|eff) Unit
+setDebug = runFn1 setDebugImpl
 
