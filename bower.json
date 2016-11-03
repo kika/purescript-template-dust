@@ -5,7 +5,7 @@
   "author": "Kirill Pertsev <kika@kikap.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/kika/purescript-template-dust.git"
+    "url": "https://github.com/kika/purescript-template-dust.git"
   },
   "moduleType": [
     "node"
