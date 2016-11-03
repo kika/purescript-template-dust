@@ -40,3 +40,9 @@ exports.loadImpl   = function( source ) {
     }
 }
 
+exports.setDebugImpl = function( debug ) {
+  return function() {
+    dust.config.whitespace = debug;
+    return {};
+  }
+}
