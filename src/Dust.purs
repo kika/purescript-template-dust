@@ -11,7 +11,7 @@ module Dust
 ) where
 
 import Prelude
-import Control.Monad.Eff (Eff)
+import Control.Monad.Eff (Eff, kind Effect)
 import Control.Monad.Eff.Exception (Error)
 import Data.Nullable (Nullable)
 import Data.Either (Either(Right, Left)) 
@@ -24,7 +24,7 @@ type RenderCallbackJS a = Fn2 (Nullable Error) a Unit
 type RenderCallback eff a = Either Error a -> Eff ( dust :: DUST | eff ) Unit
 
 -- | Effect type for dust callback and internal state change 
-foreign import data DUST :: !
+foreign import data DUST :: Effect
 foreign import compileImpl :: Fn2 String String CompiledTemplate
 foreign import loadImpl :: 
   forall eff.  Fn1 CompiledTemplate (Eff ( dust :: DUST | eff ) Unit)
